@@ -10,12 +10,12 @@ courses = db["COURSES"]
 
 class Student: 
     # constructor for Student class. Takes in first name, last name, username, and password
-    def __init__(self, first, last, username, password):
+    def __init__(self, first, last, username, password, isAdmin=False):
         self.firstName = first
         self.lastName = last
         # self.myCourses = course if courses is not None else []  -- will add later
         self.userName = username
-
+        self.isAdmin = isAdmin
         #hashes passworf
         hashed = bcrypt.hashpw(password.encode(), bcrypt.gensalt())
         password = "" # erases password in Student class for security - still exists in database
@@ -29,6 +29,7 @@ class Student:
                 "lastName": last,
                 "userName": username,
                 "passwordHashed": hashed,
+                "isAdmin": isAdmin
                 # "courses": course
             })
 
