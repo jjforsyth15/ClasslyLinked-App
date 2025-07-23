@@ -1,0 +1,75 @@
+.container {
+    font-family: sans-serif;
+    background: #2b517c;
+    width: 600px;
+    height: 750px;
+    border-radius: 20px;
+    margin-left: 30%;
+}
+
+.title {
+    color: rgb(140 218 227 / 85%);
+    padding-top: 10px;
+    padding-left: 10px;
+}
+
+.main {
+  background-color:#cadef5;
+  width: 400px;
+  height: 400px;
+  margin: 7em auto;
+  border-radius: 1.75em;
+  box-shadow: 0px 11px 35px 2px rgba(0, 0, 0, 0.14);
+}
+
+.sign {
+  padding-top: 40px;
+  color: #216bc3;
+  font-family: sans-serif;
+  font-weight: bold;
+  font-size: 23px;
+}
+
+.input {
+  width: 76%;
+  color: rbg(38, 50, 56);
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 1px;
+  background: rgba(136, 126, 126, 0.04);
+  padding: 10px 20px;
+  border: none;
+  border-radius: 20px;
+  outline: none;
+  box-sizing: border-box;
+  border: 2px solid, rgba(0, 0, 0, 0.02);
+  margin-bottom: 50px;
+  margin-left: 46px;
+  text-align: center;
+  margin-bottom: 27px;
+  font-family: sans-serif;
+}
+
+form.loginbox {
+  padding-top: 40px;
+}
+
+.input:focus {
+  border: 2px solid rgba(0, 0, 0, 0.18)
+  !important;
+}
+
+.submitButton {
+  cursor: pointer;
+  border-radius: 5em;
+  color: #fff;
+  background: linear-gradient(to right, #2745b0, #408afb);
+  border: 0;
+  padding: 10px 40px 10px 40px;
+  font-family: sans-serif;
+  margin-left: 35%;
+  font-size: 13px;
+  box-shadow: 0 0 20px 1px rgba(0, 0, 0, 0.04);
+}
+
+
