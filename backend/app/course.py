@@ -6,31 +6,80 @@ client = MongoClient(uri)
 
 db = client["CLASSLINK"]
 courses = db["COURSES"]
-
+students = db["STUDENTS"]
 
 class Course:
     def __init__(self, name, number):
         self.courseName = name
         self.courseNumber = number
-        self.students = []
 
         if courses.find_one({"courseName": name, "courseNumber": number}):
             print("Course already exists")
+            self.valid = False
         else:
             courses.insert_one({
                 "courseName": name,
-                "courseNumber": number
+                "courseNumber": number,
+                "students": []
             })
+            self.valid = True
 
     def __str__(self):
         return f"Course: {self.courseName}, #{self.courseNumber}"
 
     def AddStudent(self, studentToAdd):
-        self.students.append(studentToAdd)
+        
+        if self.is_enrolled(studentToAdd) is True:
+            print("Student already enrolled")
+            return False
+        else:
+            courses.update_one(
+                {"courseNumber": self.courseNumber},
+                {"$addToSet": {"students": studentToAdd}}
+            )
+            return True
+
+    def RemoveStudent(self, studentToRemove):
+        if self.is_enrolled(studentToRemove) is False:
+            print("Student is not enrolled in class")
+            return False #could not complete action successfully
+        else:
+            courses.update_one(
+                {"courseNumber": self.courseNumber},
+                {"$pull": {"students": studentToRemove}}
+            )
+            return True # successfully removed student
 
 
     def printStudents(self):
-        print(self.students)
+        course_doc = courses.find_one({"courseNumber": self.courseNumber})
+
+        student_usernames = course_doc.get("students", [])
+        num = 0
+        for username in student_usernames:
+            num += 1
+            student_doc = students.find_one({"userName": username})
+            print(num, ". ", student_doc["firstName"], student_doc["lastName"])
 
 
-    
+
+    def is_enrolled(self, studentToCheck):
+        course_doc = courses.find_one({"courseNumber": self.courseNumber})
+
+        if studentToCheck in course_doc["students"]:
+            return True
+        else:
+            return False
+        
+    @classmethod 
+    def load_by_number(cls, course_num):
+        course_doc = courses.find_one({"courseNumber": course_num})
+
+        if not course_doc:
+            return None
+
+        course = cls.__new__(cls)
+        course.courseName = course_doc["courseName"]
+        course.courseNumber = course_doc["courseNumber"]
+
+        return course
