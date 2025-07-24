@@ -16,7 +16,8 @@ class Student:
         # self.myCourses = course if courses is not None else []  -- will add later
         self.userName = username
         self.isAdmin = isAdmin
-        #hashes passworf
+
+        #hashes password
         hashed = bcrypt.hashpw(password.encode(), bcrypt.gensalt())
         password = "" # erases password in Student class for security - still exists in database
         
@@ -29,13 +30,21 @@ class Student:
                 "lastName": last,
                 "userName": username,
                 "passwordHashed": hashed,
-                "isAdmin": isAdmin
-                # "courses": course
+                "isAdmin": isAdmin,
+                "courses": []
             })
+    
+    # get methods
+    # set methods
+
+
+
+
+
 
     # how Student is displayed -- will need to update to look better
     def __str__(self):
-        return f"Student: {self.firstName} {self.lastName}, Courses: {', '.join(self.myCoursesourses)}"
+        return f"Student: {self.firstName} {self.lastName}, Courses: {', '.join(self.myCourses)}"
     
     # def to_dict(self):
     #     return {
@@ -47,17 +56,57 @@ class Student:
     # method to add a course to Student
     def add_course(self, courseToAdd):
         from course import Course   
-        self.myCourses.append(courseToAdd)
-        result = students.update_one(
-            {"firstName": self.firstName, "lastName": self.lastName},
-            {"$push": {"courses": courseToAdd}}
-        )
-        print("Added course: ")
-        print(courseToAdd)
+
+        if self.is_enrolled(courseToAdd):
+            print("Already enrolled in this course")
+            return False
+        else:
+            students.update_one(
+                {"userName": self.userName},
+                {"$push": {"courses": courseToAdd}}
+            )
+            return True
 
 
     # method to remove a course from Student
-    # def remove_course(self, courseToRemove):
-    #     from course import Course
-    #     #need to complete
+    def remove_course(self, courseToRemove):
+        from course import Course
 
+        if self.is_enrolled(courseToRemove):
+            print("Student not enrolled in course")
+            return False # could not complete action successfully
+        else:
+            students.update_one(
+                {"userName": self.userName},
+                {"$pull": {"courses": courseToRemove}}
+            )
+            return True # successfully removed course
+    
+
+    def is_enrolled(self, courseToCheck):
+        student_doc = students.find_one({"userName": self.userName})
+
+        if courseToCheck in student_doc["courses"]:
+            return True
+        else:
+            return False
+        
+    @classmethod
+    def load_by_username(cls, user_name):
+        student_doc = students.find_one({"userName": user_name})
+
+        if not student_doc:
+            return None
+        
+        if student_doc["isAdmin"] is True:
+            from admin import Admin
+            student = Admin.__new__(Admin)
+        else:
+            student = cls.__new__(cls)
+        
+        student.firstName = student_doc["firstName"]
+        student.lastName = student_doc["lastName"]
+        student.userName = student_doc["userName"]
+        student.isAdmin = student_doc["isAdmin"]
+
+        return student
