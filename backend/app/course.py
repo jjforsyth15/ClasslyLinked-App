@@ -1,10 +1,10 @@
 from student import Student
 from pymongo import MongoClient
 
-uri = "mongodb+srv://jjforsyth15:ClassLink2025@cluster1.imnisby.mongodb.net/"
+uri = "mongodb+srv://jjforsyth15:ClasslyLinked2025@classlylinked.bxbv8wy.mongodb.net/"
 client = MongoClient(uri)
 
-db = client["CLASSLINK"]
+db = client["CLASSLYLINKED"]
 courses = db["COURSES"]
 students = db["STUDENTS"]
 

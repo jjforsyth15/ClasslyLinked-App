@@ -7,8 +7,8 @@ import bcrypt
 app = Flask(__name__)
 CORS(app)
 
-client = MongoClient("mongodb+srv://jjforsyth15:ClassLink2025@cluster1.imnisby.mongodb.net/")
-db = client["CLASSLINK"]
+client = MongoClient("mongodb+srv://jjforsyth15:ClasslyLinked2025@classlylinked.bxbv8wy.mongodb.net/")
+db = client["CLASSLYLINKED"]
 students = db["STUDENTS"]
 
 @app.route("/signup", methods=["POST"])
