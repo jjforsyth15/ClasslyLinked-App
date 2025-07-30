@@ -146,6 +146,38 @@ def remove_course():
 
     return jsonify({"message": "Student removed from course successfully"}), 200
 
+@app.route("/promote_to_admin", methods=["POST"])
+def promote_to_admin():
+    data = request.json
+
+    username = data.get("userName")
+    adminUser = data.get("adminUser")
+
+    if not username:
+        return jsonify({"error": "Missing username"}), 400
+    if not adminUser:
+        return jsonify({"error": "Missing admin"}), 400
+    
+    student = Student.load_by_username(username)
+    admin = Admin.load_by_username(adminUser)
+    if not student:
+        return jsonify({"error": "Student not found"}), 404
+    if not admin:
+        return jsonify({"error": "Admin not found"}), 404
+    
+    if not students.find_one({"userName": adminUser, "isAdmin": True}):
+        return jsonify({"error": "Admin user does not have admin authorization"}), 409
+    
+    if students.find_one({"userName": username, "isAdmin": True}):
+        return jsonify({"error": "Student is already admin"}), 409
+
+    promoted = admin.PromoteToAdmin(username)
+
+    if not promoted:
+        return jsonify({"error": "Error occured, could not promote student to admin"}), 409
+    else:
+        return jsonify({"message": "Student promoted to admin successfully"}), 200
+    
 
 
 if __name__ == "__main__":
