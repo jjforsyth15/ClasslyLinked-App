@@ -104,10 +104,10 @@ def add_course():
     course = Course.load_by_number(courseNum)
 
     if not student:
-        return jsonify({"error": "Student does not exist"}), 404
+        return jsonify({"error": "Student not found"}), 404
     
     if not course:
-        return jsonify({"error": "Course does not exist"}), 404
+        return jsonify({"error": "Course not found"}), 404
     
     if students.find_one({"userName": username, "courses.courseNumber": courseNum}):
         return jsonify({"error": "Student is already added to course"}), 409
@@ -116,6 +116,35 @@ def add_course():
     course.AddStudent(username)
     
     return jsonify({"message": "Course added successfully"}), 200
+
+
+@app.route("/remove_course", methods=["POST"])
+def remove_course():
+    data = request.json
+
+    username = data.get("userName")
+    courseNum = data.get("courseNumber")
+
+    if not username:
+        return jsonify({"error": "Missing username"}), 400
+    if not courseNum:
+        return jsonify({"error": "Missing course number"}), 400
+    
+    student = Student.load_by_username(username)
+    course = Course.load_by_number(courseNum)
+
+    if not student:
+        return jsonify({"error": "Student not found"}), 404
+    if not course:
+        return jsonify({"error": "Course not found"}), 404
+    
+    if not students.find_one({"userName": username, "courses.courseNumber": courseNum}):
+        return jsonify({"error": "Student is not already in course"}), 409
+    
+    student.remove_course(courseNum)
+    course.RemoveStudent(username)
+
+    return jsonify({"message": "Student removed from course successfully"}), 200
 
 
 
