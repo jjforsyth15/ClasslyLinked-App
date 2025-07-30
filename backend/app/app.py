@@ -178,7 +178,19 @@ def promote_to_admin():
     else:
         return jsonify({"message": "Student promoted to admin successfully"}), 200
     
+@app.route("/get_courses", methods=["GET"])
+def get_courses():
+    
+    username = request.args.get("userName")
 
+    if not username:
+        return jsonify({"error": "Missing username"}), 400
+    
+    student = students.find_one({"userName": username})
+    if not student:
+        return jsonify({"error": "Student not found"}), 404
+    
+    return jsonify({"courses": student.get("courses", [])})
 
 if __name__ == "__main__":
     app.run(debug=True)
