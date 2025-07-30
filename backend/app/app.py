@@ -88,6 +88,37 @@ def create_course():
     Course(course_name, course_number)
     return jsonify({"message": "Course created successfully"}), 201
 
+@app.route("/add_course", methods=["POST"]) 
+def add_course():
+    data = request.json
+
+    username = data.get("userName")
+    courseNum = data.get("course")
+
+    if not username:
+        return jsonify({"error": "Missing username"}), 400
+    if not courseNum:
+        return jsonify({"error": "Missing course number"}), 400
+    
+    student = Student.load_by_username(username)
+    course = Course.load_by_number(courseNum)
+
+    if not student:
+        return jsonify({"error": "Student does not exist"}), 404
+    
+    if not course:
+        return jsonify({"error": "Course does not exist"}), 404
+    
+    if students.find_one({"userName": username, "courses.courseNumber": courseNum}):
+        return jsonify({"error": "Student is already added to course"}), 409
+    
+    student.add_course(courseNum)
+    course.AddStudent(username)
+    
+    return jsonify({"message": "Course added successfully"}), 200
+
+
+
 if __name__ == "__main__":
     app.run(debug=True)
 
