@@ -190,7 +190,18 @@ def get_courses():
     if not student:
         return jsonify({"error": "Student not found"}), 404
     
-    return jsonify({"courses": student.get("courses", [])})
+    courseNums = student.get("courses", [])
+    courseDetails = []
+
+    for number in courseNums:
+        course = courses.find_one({"courseNumber": number})
+        if course:
+            courseDetails.append({
+                "courseName": course["courseName"],
+                "courseNumber": course["courseNumber"]
+            })
+    
+    return jsonify({"courses": courseDetails}), 200
 
 if __name__ == "__main__":
     app.run(debug=True)
