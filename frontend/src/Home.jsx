@@ -6,10 +6,14 @@ import axios from "axios";
 function Home() {
     const firstName = localStorage.getItem("firstName");
     const username = localStorage.getItem("userName");
+
     const navigate = useNavigate();
+
     const [courses, setCourses] = useState([]);
     const [message, setMessage] = useState("");
     const [newCourse, setNewCourse] = useState("")
+    const [searchTerm, setSearchTerm] = useState("");
+    const [searchResults, setSearchResults] = useState([]);
 
     const getCourses = async () => {
         try {
@@ -38,12 +42,33 @@ function Home() {
         await getCourses();
     } catch (err) {
         setMessage(err.response?.data?.error || "Failed to add course");
+        setNewCourse("");
     }
   };
 
   useEffect(() => {
     getCourses();
   }, [username]);
+
+const handleSearch = async (e) => {
+    const value = e.target.value;
+    setSearchTerm(value);
+
+    if(value.trim() === "") {
+        setSearchResults([]);
+        return
+    }
+
+    try {
+        const response = await axios.get("http://localhost:5000/search_courses", {
+            params: { q: value }
+        });
+        setSearchResults(response.data.courses || []);
+    } catch {
+        setSearchResults([]);
+    }
+}
+
 
     return (
         <div className="container">
@@ -73,11 +98,25 @@ function Home() {
                 <h2>Add Course</h2>
                 <input
                     type="text"
-                    value={newCourse}
-                    onChange={(e) => setNewCourse(e.target.value)}
-                    placeholder="Course Number"
+                    value={searchTerm || newCourse}
+                    onChange={handleSearch}
+                    placeholder="Course"
                     required
                 />
+                <ul className="search-dropdown">
+                    {searchResults.map((course, index) => (
+                        <li
+                            key={index}
+                            onClick={() => {
+                                setNewCourse(course.courseNumber);
+                                setSearchTerm("");
+                                setSearchResults([]);
+                            }}
+                        >
+                            {course.courseName} ({course.courseNumber})
+                        </li>
+                    ))}
+                </ul>
                 <button className="add-button" onClick={handleAddCourse}>Add</button>
             </div>
             {message && <p className="error-message">{message}</p>}

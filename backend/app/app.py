@@ -109,7 +109,7 @@ def add_course():
     if not course:
         return jsonify({"error": "Course not found"}), 404
     
-    if students.find_one({"userName": username, "courses.courseNumber": courseNum}):
+    if students.find_one({"userName": username, "courses": courseNum}):
         return jsonify({"error": "Student is already added to course"}), 409
     
     student.add_course(courseNum)
@@ -202,6 +202,28 @@ def get_courses():
             })
     
     return jsonify({"courses": courseDetails}), 200
+
+@app.route("/search_courses", methods=["GET"])
+def search_courses():
+    query = request.args.get("q", "").strip()
+
+    if not query:
+        return jsonify({"courses": []})
+    
+    results = courses.find({
+        "$or": [
+            {"courseNumber": {"$regex": query, "$options": "i"}},
+            {"courseName": {"$regex": query, "$options": "i"}}
+        ]
+    })
+    courseList = []
+    for course in results:
+        courseList.append({
+            "courseName": course["courseName"],
+            "courseNumber": course["courseNumber"]
+        })
+
+    return jsonify({"courses": courseList})
 
 if __name__ == "__main__":
     app.run(debug=True)
