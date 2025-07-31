@@ -47,6 +47,10 @@ function Home() {
   };
 
   useEffect(() => {
+    document.title = "Home | ClasslyLinked"
+  }, []);
+
+  useEffect(() => {
     getCourses();
   }, [username]);
   
@@ -85,15 +89,31 @@ const rainBackground = () => {
 
 
     return (
-        <div>
+        <div className="entire-page">
         <div className="rain"></div>
+
+        <div className="menu-hover-wrapper">
+            <div className="hover-zone"></div>
+            <div className="sliding-menu">
+                <ul>
+                    <li className="menu-option">View Profile</li>
+                    <li className="menu-option">Add Class</li>
+                    <li className="menu-option">Remove Class</li>
+                </ul>
+                <button className="logout_button" onClick={handleLogout}>
+                    Log out
+                </button>
+                <h3 className="menu">Menu</h3>
+            </div>
+        </div>
+
         <div className="home-container">
-            <h1 className="title">ClasslyLinked</h1>
+            <div className="head">
+                <img src="ClasslyLinked_Logo2.png" className="logo" />
+                <h1 className="login_title">ClasslyLinked</h1>
+            </div>
             <h1 className="welcome_message">Welcome, {firstName}</h1>
             <p align="center">This is your homepage.</p>
-            <button className="logout_button" align="center" onClick={handleLogout}>
-                Log out
-            </button>
 
             <div className="course-list">
                 <h2>Your Courses</h2>
@@ -139,7 +159,6 @@ const rainBackground = () => {
                 <button className="add-button" onClick={handleAddCourse}>Add</button>
             </div>
             {message && <p className="error-message">{message}</p>}
-
         
         </div>
         </div>
