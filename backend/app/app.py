@@ -46,7 +46,10 @@ def login():
     user = students.find_one({"userName": user})
     
     if bcrypt.checkpw(password.encode(), user["passwordHashed"]):
-        return jsonify({"message": "Login successful. Welcome, ", "firstName": user["firstName"]}), 200
+        return jsonify({"message": "Login successful. Welcome, ", 
+                        "firstName": user["firstName"],
+                        "isAdmin": user.get("isAdmin", False)
+                        }), 200
     else:
         return jsonify({"message": "Incorrect password"}), 401
     

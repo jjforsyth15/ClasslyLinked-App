@@ -6,6 +6,7 @@ import axios from "axios";
 function Home() {
     const firstName = localStorage.getItem("firstName");
     const username = localStorage.getItem("userName");
+    const isAdmin = localStorage.getItem("isAdmin") === "true";
 
     const navigate = useNavigate();
 
@@ -27,6 +28,7 @@ function Home() {
     const handleLogout = () => {
     localStorage.removeItem("firstName");
     localStorage.removeItem("userName");
+    localStorage.removeItem("isAdmin");
     navigate("/login");
   };
 
@@ -91,15 +93,30 @@ const rainBackground = () => {
     return (
         <div className="entire-page">
         <div className="rain"></div>
-
+        {/* menu */}
         <div className="menu-hover-wrapper">
             <div className="hover-zone"></div>
             <div className="sliding-menu">
-                <ul>
-                    <li className="menu-option">View Profile</li>
-                    <li className="menu-option">Add Class</li>
-                    <li className="menu-option">Remove Class</li>
-                </ul>
+                <div className="menu-lists"
+                    style={{marginLeft: isAdmin ? "36%" : "43.5%"}}>
+                    <ul>
+                        <li className="menu-option">View Profile</li>
+                        <li className="menu-option">Add Class</li>
+                        <li className="menu-option">Remove Class</li>
+                    </ul>
+                    {/* admin options */}
+                    {isAdmin && (
+                        <>
+                            <div className="admin-menu">
+                                <ul>
+                                    <li className="admin-option">Option 1</li>
+                                    <li className="admin-option">Option 2</li>
+                                    <li className="admin-option">Option 3</li>
+                                </ul>
+                            </div>
+                        </>
+                    )}
+                </div>
                 <button className="logout_button" onClick={handleLogout}>
                     Log out
                 </button>

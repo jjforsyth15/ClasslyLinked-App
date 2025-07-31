@@ -38,6 +38,7 @@ function Login() {
 
       localStorage.setItem("firstName", name);
       localStorage.setItem("userName", formData.userName);
+      localStorage.setItem("isAdmin", response.data.isAdmin);
 
       setFirstName(name);
       setLoggedIn(true);
