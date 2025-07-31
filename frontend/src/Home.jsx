@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "./Home.css";
+import "./Home.scss";
 import axios from "axios";
 
 function Home() {
@@ -49,6 +49,10 @@ function Home() {
   useEffect(() => {
     getCourses();
   }, [username]);
+  
+  useEffect(() => {
+    rainBackground();
+  }, []);
 
 const handleSearch = async (e) => {
     const value = e.target.value;
@@ -69,8 +73,20 @@ const handleSearch = async (e) => {
     }
 }
 
+// Rain background
+const rainBackground = () => {
+    const rain = document.querySelector(".rain");
+    for (let i = 0; i < 500; i++) {
+        const drop = document.createElement("div");
+        drop.className = "drop";
+        rain.appendChild(drop);
+    }
+}
+
 
     return (
+        <div>
+        <div className="rain"></div>
         <div className="container">
             <h1 className="title">ClasslyLinked</h1>
             <h1 className="welcome_message">Welcome, {firstName}</h1>
@@ -120,6 +136,9 @@ const handleSearch = async (e) => {
                 <button className="add-button" onClick={handleAddCourse}>Add</button>
             </div>
             {message && <p className="error-message">{message}</p>}
+
+        
+        </div>
         </div>
     );
 }

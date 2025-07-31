@@ -1,0 +1,107 @@
+.container {
+    font-family: sans-serif;
+    background: #2b517c;
+    width: 80%;
+    height: 50em;
+    border-radius: 20px;
+    margin-left: 30%;
+    position: relative;
+}
+
+.title {
+    color: rgb(140 218 227 / 85%);
+    padding-top: 10px;
+    padding-left: 10px;
+    text-shadow: 0 0 8px rgba(64, 138, 251, 0.6);
+}
+
+.logout_button {
+  cursor: pointer;
+  border-radius: 5em;
+  color: #fff;
+  background: linear-gradient(to right, #2745b0, #408afb);
+  border: 0;
+  padding: 10px 40px 10px 40px;
+  font-family: sans-serif;
+  margin-left: 35%;
+  font-size: 13px;
+  box-shadow: 0 0 20px 1px rgba(0, 0, 0, 0.04);
+  transition: transform 0.2s ease;
+}
+
+.logout_button:hover {
+    background: linear-gradient(to left, #2745b0, #408afb);
+    transform: scale(1.05);
+    box-shadow: 0 0 12px rgba(64, 138, 251, 0.5);
+}
+
+.logout_button:active {
+    transform: scale(0.98);
+}
+
+.welcome_message {
+    color:#ffffff;
+    text-align: center;
+    text-shadow: 2px 2px 6px rgba(16, 10, 41, 0.4);
+}
+
+p {
+    color: white;
+}
+
+/* Rain fall background */
+
+@property --angle {
+    syntax: "<angle>";
+    inherits: false;
+    initial-value: 91deg;
+}
+
+$drops: 500;
+
+body {
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(180deg, #0e283f, #5f768a);
+    overflow: hidden;
+}
+
+.rain {
+    width: 120vw;
+    height: 100vh;
+    position: absolute;
+    left: -10vw;
+    top: 0;
+    z-index: 0;
+}
+
+.drop {
+    border: 0.25vmin solid transparent;
+    border-bottom-color: #abc2e9;
+    position: absolute;
+    top: -5vmin;
+    --angle: 91deg;
+}
+
+@for $i from 1 through $drops {
+    .drop:nth-child(#{$i}) {
+        opacity: random(90) * 0.1;
+        left: random(1200) * 0.1vw;
+        border-left-width: random(80) * 0.1vmin;
+        animation: fall-#{$i} 
+            (random(15) * 0.15s)
+            (random(25) * -0.5s)
+            ease-in
+            infinite;
+
+        @keyframes fall-#{$i} {
+            #{percentage( random(50) / 500)} {
+                transform: rotate(var(--angle)) translateX(0);
+            }
+            to {
+                transform: rotate(var(--angle)) translateX(calc(100vh + 5vmin));
+            }
+        }
+    }
+}
+
