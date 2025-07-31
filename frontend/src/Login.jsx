@@ -18,6 +18,10 @@ function Login() {
   const [firstName, setFirstName] = useState("");
 
   useEffect(() => {
+    document.title = "Login | ClasslyLinked";
+  }, []);
+
+  useEffect(() => {
     const user = localStorage.getItem("userName");
 
     if(user) 

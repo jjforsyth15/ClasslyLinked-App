@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
@@ -13,6 +13,10 @@ function Signup() {
         userName: "",
         password: ""
     });
+
+    useEffect(() => {
+        document.title = "Signup | ClasslyLinked";
+    }, []);
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
