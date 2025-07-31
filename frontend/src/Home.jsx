@@ -87,7 +87,7 @@ const rainBackground = () => {
     return (
         <div>
         <div className="rain"></div>
-        <div className="container">
+        <div className="home-container">
             <h1 className="title">ClasslyLinked</h1>
             <h1 className="welcome_message">Welcome, {firstName}</h1>
             <p align="center">This is your homepage.</p>
@@ -112,13 +112,16 @@ const rainBackground = () => {
 
             <div className="add-course-form">
                 <h2>Add Course</h2>
-                <input
-                    type="text"
-                    value={searchTerm || newCourse}
-                    onChange={handleSearch}
-                    placeholder="Course"
-                    required
-                />
+                <div className="add-box">
+                    <input
+                        type="text"
+                        className="add-input"
+                        value={searchTerm || newCourse}
+                        onChange={handleSearch}
+                        placeholder="Course"
+                        required
+                    />
+                </div>
                 <ul className="search-dropdown">
                     {searchResults.map((course, index) => (
                         <li
