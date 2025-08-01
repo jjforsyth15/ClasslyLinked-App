@@ -13,7 +13,7 @@ class Admin(Student):
     def __init__(self, first, last, username, password):
         super().__init__(first, last, username, password, isAdmin=True)
 
-
+    # Create a new course
     def CreateCourse(self, c_name, c_num):
         
         course = courses.find_one({"courseNumber": c_num})
@@ -26,6 +26,7 @@ class Admin(Student):
             print(f"Course '{c_name}' ({c_num}) created.")
             return True
 
+    # Remove a student from a specific course
     def RemoveStudentFrom_course(self, studentToRemove, courseToRemoveFrom):
         student = students.find_one({"userName":studentToRemove})
         course = courses.find_one({"courseNumber": courseToRemoveFrom})
@@ -45,6 +46,7 @@ class Admin(Student):
             )
             return True
 
+    # Remove a student from the STUDENTS database collection
     def RemoveStudentFrom_STUDENTS(self, studentToRemove):
 
         student = students.find_one({"userName": studentToRemove})
@@ -57,13 +59,13 @@ class Admin(Student):
             courses.update_many({}, {"$pull": {"students": studentToRemove}})
             return True
         
-
+    # Print all courses by: i. Course Name | Number | Number of students
     def PrintCourses(self):
         for i, course in enumerate(courses.find(), 1):
             enrolled = len(course.get("students", []))
             print(i, ". Course: ", course["courseName"], " | Number: ", course["courseNumber"], " | Number of Students: ", enrolled)
 
-
+    # Print all students in STUDENTS database collection
     def PrintStudentsIn_STUDENTS(self):
         for i, student in enumerate(students.find(), 1):
             num_courses = len(student.get("courses", []))
@@ -73,6 +75,7 @@ class Admin(Student):
             else:
                 print(i, ". Name: ", student["firstName"], " ", student["lastName"], " | Username:", student["userName"])
 
+    # Promote a student user to admin user
     def PromoteToAdmin(self, student_to_promote):
         admin = students.find_one({"userName": student_to_promote})
 
@@ -86,6 +89,7 @@ class Admin(Student):
                 )
             return True
         
+    # Print all students in a specific course
     def PrintStudentsIn_course(self, course_to_check):
         course = courses.find_one({"courseNumber": course_to_check})
         
