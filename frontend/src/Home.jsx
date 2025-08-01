@@ -4,18 +4,22 @@ import "./Home.scss";
 import axios from "axios";
 
 function Home() {
+
+    // Assigns login data via localStorage
     const firstName = localStorage.getItem("firstName");
     const username = localStorage.getItem("userName");
     const isAdmin = localStorage.getItem("isAdmin") === "true";
 
     const navigate = useNavigate();
 
+    // Sets useState functions
     const [courses, setCourses] = useState([]);
     const [message, setMessage] = useState("");
     const [newCourse, setNewCourse] = useState("")
     const [searchTerm, setSearchTerm] = useState("");
     const [searchResults, setSearchResults] = useState([]);
 
+    // Function to get courses from Flask API backend
     const getCourses = async () => {
         try {
             const response = await axios.get("http://localhost:5000/get_courses", {params: { userName: username }});
@@ -25,6 +29,7 @@ function Home() {
         }
     };
 
+    // Function to handle Logout process
     const handleLogout = () => {
     localStorage.removeItem("firstName");
     localStorage.removeItem("userName");
@@ -32,6 +37,7 @@ function Home() {
     navigate("/login");
   };
 
+//   Allows user to add course 
   const handleAddCourse = async () => {
     try {
         const response = await axios.post("http://localhost:5000/add_course", {
@@ -48,18 +54,24 @@ function Home() {
     }
   };
 
+// useEffect functions
+
+//   Sets tab title
   useEffect(() => {
     document.title = "Home | ClasslyLinked"
   }, []);
 
+// Gets courses list based on username
   useEffect(() => {
     getCourses();
   }, [username]);
   
+//   Runs rain background effect
   useEffect(() => {
     rainBackground();
   }, []);
 
+//   Allows user to search courses to add
 const handleSearch = async (e) => {
     const value = e.target.value;
     setSearchTerm(value);
@@ -89,7 +101,7 @@ const rainBackground = () => {
     }
 }
 
-
+    // Webpage to return
     return (
         <div className="entire-page">
         <div className="rain"></div>
@@ -117,13 +129,14 @@ const rainBackground = () => {
                         </>
                     )}
                 </div>
+                {/* Logout button */}
                 <button className="logout_button" onClick={handleLogout}>
                     Log out
                 </button>
                 <h3 className="menu">Menu</h3>
             </div>
         </div>
-
+                    {/* Main page container */}
         <div className="home-container">
             <div className="head">
                 <img src="ClasslyLinked_Logo2.png" className="logo" />
@@ -132,6 +145,7 @@ const rainBackground = () => {
             <h1 className="welcome_message">Welcome, {firstName}</h1>
             <p align="center">This is your homepage.</p>
 
+                    {/* User course list */}
             <div className="course-list">
                 <h2>Your Courses</h2>
                 {courses.length === 0 ? (
@@ -146,7 +160,7 @@ const rainBackground = () => {
                     </ul>
                 )}
             </div>
-
+                {/* Course add section */}
             <div className="add-course-form">
                 <h2>Add Course</h2>
                 <div className="add-box">
@@ -159,6 +173,7 @@ const rainBackground = () => {
                         required
                     />
                 </div>
+                {/* Dropdown list of courses from course search */}
                 <ul className="search-dropdown">
                     {searchResults.map((course, index) => (
                         <li
