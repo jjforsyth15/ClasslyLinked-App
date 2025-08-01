@@ -14,6 +14,7 @@ db = client["CLASSLYLINKED"]
 students = db["STUDENTS"]
 courses = db["COURSES"]
 
+# Route function for signing up
 @app.route("/signup", methods=["POST"])
 def signUp():
     data = request.json
@@ -32,6 +33,7 @@ def signUp():
 
     return jsonify({"message": "Student log in created successfully"}), 201
 
+# Route function for logging in
 @app.route("/login", methods=["POST"])
 def login():
     data = request.json
@@ -53,7 +55,7 @@ def login():
     else:
         return jsonify({"message": "Incorrect password"}), 401
     
-
+# Route function for creating a new course - for admin use only
 @app.route("/create_course", methods=["POST"])
 def create_course():
     data = request.json
@@ -91,6 +93,7 @@ def create_course():
     Course(course_name, course_number)
     return jsonify({"message": "Course created successfully"}), 201
 
+# Route function to add a course - for all student use
 @app.route("/add_course", methods=["POST"]) 
 def add_course():
     data = request.json
@@ -120,7 +123,7 @@ def add_course():
     
     return jsonify({"message": "Course added successfully"}), 200
 
-
+# Route function to remove a course - for all student use
 @app.route("/remove_course", methods=["POST"])
 def remove_course():
     data = request.json
@@ -149,6 +152,7 @@ def remove_course():
 
     return jsonify({"message": "Student removed from course successfully"}), 200
 
+# Route function to promote student user to admin user - for admin use only
 @app.route("/promote_to_admin", methods=["POST"])
 def promote_to_admin():
     data = request.json
@@ -180,7 +184,8 @@ def promote_to_admin():
         return jsonify({"error": "Error occured, could not promote student to admin"}), 409
     else:
         return jsonify({"message": "Student promoted to admin successfully"}), 200
-    
+
+# Route fuunction for React front end to request a user's courses
 @app.route("/get_courses", methods=["GET"])
 def get_courses():
     
@@ -206,6 +211,7 @@ def get_courses():
     
     return jsonify({"courses": courseDetails}), 200
 
+# Route function to search courses
 @app.route("/search_courses", methods=["GET"])
 def search_courses():
     query = request.args.get("q", "").strip()

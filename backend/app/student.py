@@ -82,7 +82,7 @@ class Student:
             )
             return True # successfully removed course
     
-
+    # Helper method to check if student is enrolled in a specific course
     def is_enrolled(self, courseToCheck):
         student_doc = students.find_one({"userName": self.userName})
 
@@ -91,6 +91,7 @@ class Student:
         else:
             return False
         
+    # static method to allow a student to be loaded from the STUDENTS database collection without creating new student
     @classmethod
     def load_by_username(cls, user_name):
         student_doc = students.find_one({"userName": user_name})

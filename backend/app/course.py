@@ -9,6 +9,7 @@ courses = db["COURSES"]
 students = db["STUDENTS"]
 
 class Course:
+    # Constructor for course
     def __init__(self, name, number):
         self.courseName = name
         self.courseNumber = number
@@ -24,9 +25,11 @@ class Course:
             })
             self.valid = True
 
+    # to print course
     def __str__(self):
         return f"Course: {self.courseName}, #{self.courseNumber}"
 
+    # Add a student to course
     def AddStudent(self, studentToAdd):
         
         if self.is_enrolled(studentToAdd) is True:
@@ -39,6 +42,7 @@ class Course:
             )
             return True
 
+    # Remove a student from course
     def RemoveStudent(self, studentToRemove):
         if self.is_enrolled(studentToRemove) is False:
             print("Student is not enrolled in class")
@@ -50,7 +54,7 @@ class Course:
             )
             return True # successfully removed student
 
-
+    # Print all students in course
     def printStudents(self):
         course_doc = courses.find_one({"courseNumber": self.courseNumber})
 
@@ -62,7 +66,7 @@ class Course:
             print(num, ". ", student_doc["firstName"], student_doc["lastName"])
 
 
-
+    # Helper method to check if a specific student is enrolled in course
     def is_enrolled(self, studentToCheck):
         course_doc = courses.find_one({"courseNumber": self.courseNumber})
 
@@ -71,6 +75,7 @@ class Course:
         else:
             return False
         
+    # Static method to load a course from the COURSES database collection without creating new course
     @classmethod 
     def load_by_number(cls, course_num):
         course_doc = courses.find_one({"courseNumber": course_num})

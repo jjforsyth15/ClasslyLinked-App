@@ -10,6 +10,7 @@ courses = db["COURSES"]
 students = db["STUDENTS"]
 
 class Admin(Student):
+    # Constructor for admin inheriting Student class
     def __init__(self, first, last, username, password):
         super().__init__(first, last, username, password, isAdmin=True)
 
