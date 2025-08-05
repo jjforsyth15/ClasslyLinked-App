@@ -121,9 +121,9 @@ const rainBackground = () => {
                         <>
                             <div className="admin-menu">
                                 <ul>
-                                    <li className="admin-option">Option 1</li>
-                                    <li className="admin-option">Option 2</li>
-                                    <li className="admin-option">Option 3</li>
+                                    <li className="admin-option">Add course to COURSES</li>
+                                    <li className="admin-option">Promote student user to admin</li>
+                                    <li className="admin-option">Remove student from a course</li>
                                 </ul>
                             </div>
                         </>
