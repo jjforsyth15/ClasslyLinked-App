@@ -65,6 +65,28 @@ function Home() {
     }
   };
 
+  const handleRemoveCourse = async () => {
+    
+    if(!newCourse) {
+        setMessage("Please select a course first.");
+        return;
+    }
+
+    try {
+        const response = await axios.post("http://localhost:5000/remove_course", {
+            userName: username,
+            course: newCourse
+        });
+
+        setMessage(response.data.message);
+        setNewCourse("");
+        await getCourses();
+    } catch (err) {
+        setMessage(err.response?.data?.error || "Failed to remove course");
+        setNewCourse("");
+    }
+  };
+
 // useEffect functions
 
 //   Sets tab title
@@ -89,7 +111,7 @@ const handleSearch = async (e) => {
 
     if(value.trim() === "") {
         setSearchResults([]);
-        return
+        return;
     }
 
     try {
@@ -101,6 +123,26 @@ const handleSearch = async (e) => {
         setSearchResults([]);
     }
 }
+
+const handleStudentCourseSearch = async (e) => {
+    const value = e.target.value;
+    setSearchTerm(value);
+
+    if (value.trim() === "") {
+        setSearchResults([]);
+        return;
+    }
+
+    try {
+        const response = await axios.get("http://localhost:5000//search_student_courses", {
+            params: { username, q: value }
+        });
+        setSearchResults(response.data.courses || []);
+
+    } catch {
+        setSearchResults([]);
+    }
+};
 
 // Rain background
 const rainBackground = () => {
@@ -206,7 +248,7 @@ const rainBackground = () => {
                             </li>
                         ))}
                     </ul>
-                    <button className="add-button" onClick={handleAddCourse}>Add</button>
+                    <button className="add-button" onClick={() => { handleAddCourse(); setSearchTerm("");}}>Add</button>
                 </div>
                 {message && <p className="error-message">{message}</p>}
             </div>
@@ -280,7 +322,7 @@ const rainBackground = () => {
                             </li>
                         ))}
                     </ul>
-                    <button className="add-button" onClick={handleAddCourse}>Add</button>
+                    <button className="add-button" onClick={() => { handleAddCourse(); setSearchTerm("");}}>Add</button>
                 </div>
                 {message && <p className="add-error-message">{message}</p>}
                 </div>
@@ -298,13 +340,31 @@ const rainBackground = () => {
                             <input
                             type="text"
                             className="remove-input"
-                            // value={searchTerm}
-                            // onChange={handleSearch}
+                            value={searchTerm}
+                            onChange={handleStudentCourseSearch}
                             placeholder="Course"
                             required
                         />
                         </div>
 
+                        {/* Dropdown list */}
+                        <ul className='search-dropdown'>
+                            {searchResults.map((course, index) => (
+                                <li
+                                    key = {index}
+                                    onClick={() => {
+                                        setNewCourse(course.courseNumber);
+                                        setSearchTerm(course.courseName + " (" + course.courseNumber + ")");
+                                        setSearchResults([]);
+                                    }}
+                                >
+                                    {course.courseName} ({course.courseNumber})
+                                </li>
+
+                            ))}
+                        </ul>
+                        <button className="remove-button" onClick={() => { handleRemoveCourse(); setSearchTerm("");}}>Remove</button>
+                        {message && <p className="remove-error-message">{message}</p>}
                     </div>
 
                 </div>

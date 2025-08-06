@@ -72,7 +72,7 @@ class Student:
     def remove_course(self, courseToRemove):
         from course import Course
 
-        if self.is_enrolled(courseToRemove):
+        if not self.is_enrolled(courseToRemove):
             print("Student not enrolled in course")
             return False # could not complete action successfully
         else:

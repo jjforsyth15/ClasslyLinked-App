@@ -129,7 +129,7 @@ def remove_course():
     data = request.json
 
     username = data.get("userName")
-    courseNum = data.get("courseNumber")
+    courseNum = data.get("course")
 
     if not username:
         return jsonify({"error": "Missing username"}), 400
@@ -144,7 +144,7 @@ def remove_course():
     if not course:
         return jsonify({"error": "Course not found"}), 404
     
-    if not students.find_one({"userName": username, "courses.courseNumber": courseNum}):
+    if not students.find_one({"userName": username, "courses": courseNum}):
         return jsonify({"error": "Student is not already in course"}), 409
     
     student.remove_course(courseNum)
@@ -233,6 +233,52 @@ def search_courses():
         })
 
     return jsonify({"courses": courseList})
+
+# Route function to search a student's courses
+@app.route("/search_student_courses", methods=["GET"])
+def search_student_courses():
+    query = request.args.get("q", "").strip()
+    username = request.args.get("username").strip()
+
+    if not query:
+        return jsonify({"courses": []})
+
+    if not username:
+        return jsonify({"error": "Missing username"}), 400
+    
+    student = students.find_one({"userName": username})
+    if not student:
+        return jsonify({"error": "Student not found"}), 404
+    
+    student_courses = student.get("courses", [])
+
+    if not student_courses:
+        return jsonify({"courses": []})
+    
+    course_query = {
+        "$and": [
+            {"courseNumber": {"$in": student_courses}},
+            {
+                "$or": [
+                    {"courseNumber": {"$regex": query, "$options": "i"}},
+                    {"courseName": {"$regex": query, "$options": "i"}}
+                ]
+            } 
+        ]
+    }
+    results = courses.find(course_query)
+
+    course_list = []
+
+    for course in results:
+        course_list.append({
+            "courseName": course["courseName"],
+            "courseNumber": course["courseNumber"]
+        })
+    
+    return jsonify({"courses": course_list})
+    
+    
 
 if __name__ == "__main__":
     app.run(debug=True)
