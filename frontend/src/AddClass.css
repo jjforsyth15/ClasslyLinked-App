@@ -1,0 +1,86 @@
+.AddClass-container {
+    background-color: #fff;
+    margin-left: 10%;
+    width: 80%;
+    height: 800px;
+}
+
+.AddClass-title {
+    padding-top: 0.5em;
+    font-size: 3em;
+    text-align: center;
+    color: rgba(8, 41, 90, 0.85);
+    text-shadow: 0 0 8px rgba(64, 138, 251, 0.6);
+}
+
+.add-course-form {
+    margin-left: 5%;
+    background-color: #abc2e9;
+    margin-right: 5%;
+}
+
+.add-input {
+  width: 76%;
+  color: rbg(38, 50, 56);
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 1px;
+  background: rgba(136, 126, 126, 0.04);
+  padding: 10px 20px;
+  border: none;
+  border-radius: 20px;
+  outline: none;
+  box-sizing: border-box;
+  border: 2px solid, rgba(0, 0, 0, 0.02);
+  margin-bottom: 50px;
+  margin-left: 46px;
+  margin-top: 20px;
+  text-align: center;
+  margin-bottom: 27px;
+  font-family: sans-serif;
+  transition: all 0.3s ease;
+}
+
+.add-input:focus {
+  border-color: #408afb;
+  box-shadow: 0 0 8px rgba(64, 138, 251, 0.6);
+  transform: scale(1.03);
+}
+.add-input:hover {
+  border-color: #408afb;
+  box-shadow: 0 0 8px rgba(64, 138, 251, 0.6);
+  transform: scale(1.02);
+}
+
+.add-button {
+    cursor: pointer;
+    border-radius: 5em;
+    color: #fff;
+    background: linear-gradient(to right, #2745b0, #408afb);
+    border: 0;
+    padding: 5px 20px 5px 20px;
+    font-family: sans-serif;
+    margin-left: 5%;
+    margin-bottom: 10px;
+    font-size: 12px;
+    box-shadow: 0 0 20px 1px rgba(0, 0, 0, 0.04);
+    transition: transform 0.2s ease;
+}
+.add-button:hover {
+    background: linear-gradient(to left, #2745b0, #408afb);
+    transform: scale(1.05);
+    box-shadow: 0 0 12px rgba(64, 138, 251, 0.5);
+}
+.add-button:active {
+    transform: scale(0.98);
+}
+
+.search-dropdown {
+    list-style: none;
+    cursor: pointer;
+}
+
+.add-error-message {
+    margin-left: 20px;
+    color: black;
+}

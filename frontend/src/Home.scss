@@ -38,7 +38,6 @@
 
 .sliding-menu ul {
     margin: 0;
-    padding: 1rem 1rem 0.5rem 1rem;
     list-style: none;
     align-items: center;
 }
@@ -51,6 +50,11 @@
     color: rgba(255, 255, 255, 0.5);
 }
 
+.regular-menu {
+    padding: 1rem 1rem 0.5rem 1rem;
+    column-count: 2;
+    column-gap: 5px;
+}
 .menu {
     background-color: #abc2e9;
     margin-top:auto;
@@ -65,6 +69,8 @@
 }
 
 .menu-lists {
+    padding-top: 1rem;
+    column-count: 2;
     display:flex;
     gap: 40px;
     align-items: center;
@@ -85,68 +91,6 @@
 
 .course-list {
     margin-left: 5%;
-}
-
-.add-course-form {
-    margin-left: 5%;
-    background-color: #abc2e9;
-    margin-right: 5%;
-}
-
-.add-input {
-  width: 76%;
-  color: rbg(38, 50, 56);
-  font-weight: 700;
-  font-size: 14px;
-  letter-spacing: 1px;
-  background: rgba(136, 126, 126, 0.04);
-  padding: 10px 20px;
-  border: none;
-  border-radius: 20px;
-  outline: none;
-  box-sizing: border-box;
-  border: 2px solid, rgba(0, 0, 0, 0.02);
-  margin-bottom: 50px;
-  margin-left: 46px;
-  margin-top: 20px;
-  text-align: center;
-  margin-bottom: 27px;
-  font-family: sans-serif;
-  transition: all 0.3s ease;
-}
-
-.add-input:focus {
-  border-color: #408afb;
-  box-shadow: 0 0 8px rgba(64, 138, 251, 0.6);
-  transform: scale(1.03);
-}
-.add-input:hover {
-  border-color: #408afb;
-  box-shadow: 0 0 8px rgba(64, 138, 251, 0.6);
-  transform: scale(1.02);
-}
-
-.add-button {
-    cursor: pointer;
-    border-radius: 5em;
-    color: #fff;
-    background: linear-gradient(to right, #2745b0, #408afb);
-    border: 0;
-    padding: 5px 20px 5px 20px;
-    font-family: sans-serif;
-    margin-left: 5%;
-    margin-bottom: 10px;
-    font-size: 12px;
-    box-shadow: 0 0 20px 1px rgba(0, 0, 0, 0.04);
-    transition: transform 0.2s ease;
-}
-.add-button:hover {
-    background: linear-gradient(to left, #2745b0, #408afb);
-    transform: scale(1.05);
-    box-shadow: 0 0 12px rgba(64, 138, 251, 0.5);
-}
-.add-button:active {
-    transform: scale(0.98);
 }
 
 
@@ -211,7 +155,7 @@ body {
     position: absolute;
     left: -10vw;
     top: 0;
-    z-index: 0;
+    z-index: -1;
 }
 
 .drop {

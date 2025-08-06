@@ -1,0 +1,52 @@
+.profile-container {
+    background: #fff;
+    margin-left: 10%;
+    width: 80%;
+    height: 800px;
+}
+
+.profile-title {
+    padding-top: 0.5em;
+    font-size: 3em;
+    text-align: center;
+    color: rgba(8, 41, 90, 0.85);
+    text-shadow: 0 0 8px rgba(64, 138, 251, 0.6);
+}
+
+.course-list-buttons {
+    margin-left: 20%;
+    display: inline-flex;
+    cursor: pointer;
+    border-radius: 5em;
+    color: #fff;
+    background: linear-gradient(to right, #2745b0, #408afb);
+    border: 0;
+    padding: 10px 40px 10px 40px;
+    font-family: sans-serif;
+    /* //margin-left: 35%; */
+    font-size: 13px;
+    box-shadow: 0 0 20px 1px rgba(0, 0, 0, 0.04);
+    transition: transform 0.2s ease;
+}
+.course-list-buttons:hover {
+    background: linear-gradient(to left, #2745b0, #408afb);
+    transform: scale(1.05);
+    box-shadow: 0 0 12px rgba(64, 138, 251, 0.5);
+}
+.course-list-buttons:active {
+    transform: scale(0.98);
+}
+
+.user-courses-title {
+    text-align: center;
+}
+
+.user-mates-title {
+    padding-top: 5%; 
+    text-align: center;
+}
+
+.course-list {
+    column-count: 2;
+    column-gap: 40px;
+}
