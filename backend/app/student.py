@@ -31,7 +31,9 @@ class Student:
                 "userName": username,
                 "passwordHashed": hashed,
                 "isAdmin": isAdmin,
-                "courses": []
+                "courses": [],
+                "interests": [],
+                "mates": []
             })
     
     # get methods
