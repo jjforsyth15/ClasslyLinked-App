@@ -21,6 +21,7 @@ function Home() {
     const [newCourse, setNewCourse] = useState("")
     const [searchTerm, setSearchTerm] = useState("");
     const [searchResults, setSearchResults] = useState([]);
+    const [matches, setMatches] = useState([]);
 
     const [form, setForm] = useState('Dashboard');
 
@@ -104,6 +105,26 @@ function Home() {
     rainBackground();
   }, []);
 
+// Displays user matches
+  useEffect(() => {
+    const response = axios
+        .get("http://localhost:5000/get_user_matches", { params : { userName: username } })
+        .then(res =>
+            setMatches(
+                res.data.matches.map(m => ({
+                    ...m,
+                    name: `${m.firstName} ${m.lastName}`,
+                    courses: (m.commonCourses || []).join(', ')
+                }))
+            )
+        )
+        .catch(err => {
+            console.error("Could not fetch matches:", err);
+            setMatches([]);
+        });
+
+  }, [username]);
+
 //   Allows user to search courses to add
 const handleSearch = async (e) => {
     const value = e.target.value;
@@ -154,6 +175,7 @@ const rainBackground = () => {
     }
 }
 
+
     // Webpage to return
     return (
         <div className="entire-page">
@@ -203,11 +225,10 @@ const rainBackground = () => {
                     <title>Dashboard | ClasslyLinked</title>
                 </div>
                 <h1 className="welcome_message">Welcome, {firstName}</h1>
-                <p align="center">This is your homepage.</p>
 
                         {/* User course list */}
                 <div className="course-list">
-                    <h2>Your Courses</h2>
+                    <h2>My Courses</h2>
                     {courses.length === 0 ? (
                         <p>There are no courses to show</p>
                     ) : (
@@ -220,8 +241,23 @@ const rainBackground = () => {
                         </ul>
                     )}
                 </div>
+
+                <div className="my-matches-box">
+                    <h2>My Matches</h2>
+                    {matches.map((match, index) => (
+                    <div className="match-box" key={index}>
+                        <h2 className="match-name">{match.name}</h2>
+                        <p>
+                            <strong>Shared Courses </strong> 
+                            <span className="shared-courses">{match.courses}</span>
+                        </p>
+                    </div>
+                    ))}
+                </div>
+                
+
                     {/* Course add section */}
-                <div className="add-course-form">
+                {/* <div className="add-course-form">
                     <h2>Add Course</h2>
                     <div className="add-box">
                         <input
@@ -232,9 +268,10 @@ const rainBackground = () => {
                             placeholder="Course"
                             required
                         />
-                    </div>
+                    </div> */}
+
                     {/* Dropdown list of courses from course search */}
-                    <ul className="search-dropdown">
+                    {/* <ul className="search-dropdown">
                         {searchResults.map((course, index) => (
                             <li
                                 key={index}
@@ -249,7 +286,7 @@ const rainBackground = () => {
                         ))}
                     </ul>
                     <button className="add-button" onClick={() => { handleAddCourse(); setSearchTerm("");}}>Add</button>
-                </div>
+                </div> */}
                 {message && <p className="error-message">{message}</p>}
             </div>
         )}

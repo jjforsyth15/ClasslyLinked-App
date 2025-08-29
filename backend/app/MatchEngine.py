@@ -3,6 +3,7 @@ from pymongo import MongoClient
 client = MongoClient("mongodb+srv://jjforsyth15:ClasslyLinked2025@classlylinked.bxbv8wy.mongodb.net/")
 db = client["CLASSLYLINKED"]
 students = db["STUDENTS"]
+courses = db["COURSES"]
 
 def getMatches(student_user, top_n = 7):
 
@@ -15,6 +16,15 @@ def getMatches(student_user, top_n = 7):
     my_courses = set(me.get("courses"))
     if not my_courses:
         return []
+    
+    name_map = {
+        d["courseNumber"]: f'{d.get("courseName", "")} ({d["courseNumber"]})'
+
+        for d in courses.find( 
+            {"courseNumber": {"$in": list(my_courses)}},
+            {"courseName": 1, "courseNumber": 1, "_id": 0}
+        )
+    }
 
     cursor = students.find(
         {
@@ -33,6 +43,7 @@ def getMatches(student_user, top_n = 7):
         common_count = len(common)
 
         if common:
+            common_pretty = [name_map.get(c, str(c)) for c in common]
             matches.append({
                 "firstName": cand.get("firstName", ""),
                 "lastName": cand.get("lastName", ""),

@@ -4,6 +4,7 @@ from pymongo import MongoClient
 from student import Student
 from admin import Admin
 from course import Course
+from MatchEngine import getMatches
 import bcrypt 
 
 app = Flask(__name__)
@@ -232,7 +233,7 @@ def search_courses():
             "courseNumber": course["courseNumber"]
         })
 
-    return jsonify({"courses": courseList})
+    return jsonify({"courses": courseList}), 200
 
 # Route function to search a student's courses
 @app.route("/search_student_courses", methods=["GET"])
@@ -276,7 +277,43 @@ def search_student_courses():
             "courseNumber": course["courseNumber"]
         })
     
-    return jsonify({"courses": course_list})
+    return jsonify({"courses": course_list}), 200
+
+
+@app.route("/get_user_matches", methods=["GET"])
+def get_user_matches():
+    user = request.args.get("userName")
+    if not user:
+        return jsonify({"message": "userName query-param required"}), 400
+    
+    student_id = students.find_one({"userName": user})
+    if not student_id:
+        return jsonify({"error": "userName not found"}), 404
+    
+    user_matches = getMatches(user)
+
+    all_nums = {str(c) for m in user_matches for c in (m.get("commonCourses") or [])}
+    name_map = {
+        d["courseNumber"]: f'{d.get("courseName", "")} ({d["courseNumber"]})'
+        for d in courses.find(
+            {"courseNumber": {"$in": list(all_nums)}},
+            {"courseName": 1, "courseNumber": 1, "_id": 0}
+        )
+    }
+
+    for m in user_matches:
+        m["firstName"] = m.get("firstName", "") or ""
+        m["lastName"] = m.get("lastName", "") or ""
+        m["userName"] = m.get("userName", "") or ""
+        m["commonCount"] = int(m.get("commonCount", 0) or 0)
+        m["commonCourses"] = [name_map.get(str(c), str(c)) for c in (m.get("commonCourses") or [])]
+
+    results = {
+        "numMatches": len(user_matches),
+        "matches": user_matches
+    }
+
+    return jsonify(results), 200
     
     
 
