@@ -123,7 +123,7 @@ function Home() {
             setMatches([]);
         });
 
-  }, [username]);
+  }, [courses]);
 
 //   Allows user to search courses to add
 const handleSearch = async (e) => {
