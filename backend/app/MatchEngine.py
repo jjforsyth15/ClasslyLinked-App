@@ -12,7 +12,7 @@ def getMatches(student_user, top_n = 7):
         print("Could not find user from userName.")
         return []
     
-    my_courses = set(me.get("courseNumbers"))
+    my_courses = set(me.get("courses"))
     if not my_courses:
         return []
 
@@ -43,6 +43,6 @@ def getMatches(student_user, top_n = 7):
         
         totals_by_user[cand.get("userName", "")] = common_count
 
-    return matches, totals_by_user
+    return matches#, totals_by_user
     
 
