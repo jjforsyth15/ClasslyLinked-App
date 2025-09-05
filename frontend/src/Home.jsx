@@ -161,6 +161,10 @@ const handleStudentCourseSearch = async (e) => {
     }
 };
 
+// const handleConnect = async (e) = {
+
+// }
+
 
     // Webpage to return
     return (
@@ -232,46 +236,16 @@ const handleStudentCourseSearch = async (e) => {
                     {matches.map((match, index) => (
                     <div className="match-box" key={index}>
                         <h2 className="match-name">{match.name}</h2>
-                        <p>
-                            <strong>Shared Courses </strong> 
+                        <p className="shared">
+                            <strong>Shared Courses: </strong> 
                             <span className="shared-courses">{match.courses}</span>
                         </p>
+                        <button className="connect-button">Connect</button>
                     </div>
                     ))}
                 </div>
                 
 
-                    {/* Course add section */}
-                {/* <div className="add-course-form">
-                    <h2>Add Course</h2>
-                    <div className="add-box">
-                        <input
-                            type="text"
-                            className="add-input"
-                            value={searchTerm}
-                            onChange={handleSearch}
-                            placeholder="Course"
-                            required
-                        />
-                    </div> */}
-
-                    {/* Dropdown list of courses from course search */}
-                    {/* <ul className="search-dropdown">
-                        {searchResults.map((course, index) => (
-                            <li
-                                key={index}
-                                onClick={() => {
-                                    setNewCourse(course.courseNumber);
-                                    setSearchTerm(course.courseName + " (" + course.courseNumber + ")");
-                                    setSearchResults([]);
-                                }}
-                            >
-                                {course.courseName} ({course.courseNumber})
-                            </li>
-                        ))}
-                    </ul>
-                    <button className="add-button" onClick={() => { handleAddCourse(); setSearchTerm("");}}>Add</button>
-                </div> */}
                 {message && <p className="error-message">{message}</p>}
             </div>
         )}

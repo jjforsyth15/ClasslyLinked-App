@@ -75,13 +75,8 @@
     display:flex;
     gap: 40px;
     align-items: center;
-    /* //margin-left: 35%; */
 }
-/* // .menu-lists ul {
-//     list-style: none;
-//     padding: 0;
-//     margin: 0;
-// } */
+
 
 .title {
     color: rgb(140 218 227 / 85%);
@@ -103,7 +98,6 @@
   border: 0;
   padding: 10px 40px 10px 40px;
   font-family: sans-serif;
-  /* //margin-left: 35%; */
   font-size: 13px;
   box-shadow: 0 0 20px 1px rgba(0, 0, 0, 0.04);
   transition: transform 0.2s ease;
@@ -150,7 +144,7 @@ p {
 
 .match-box {
     margin-left: 5%;
-    background-color: #abc2e9;
+    background-color: #d9e6fd;
     margin-right: 5%;
 }
 
@@ -160,3 +154,30 @@ p {
     color: rgba(8, 41, 90, 0.85);
 }
 
+.shared {
+    color: rgba(8, 41, 90, 0.85);
+}
+
+.connect-button {
+  cursor: pointer;
+  
+  border-radius: 5em;
+  color: #fff;
+  background: linear-gradient(to right, #2745b0, #408afb);
+  border: 0;
+  padding: 10px 40px 10px 40px;
+  font-family: sans-serif;
+  font-size: 13px;
+  box-shadow: 0 0 20px 1px rgba(0, 0, 0, 0.04);
+  transition: transform 0.2s ease;
+}
+
+.connect-button:hover {
+    background: linear-gradient(to left, #2745b0, #408afb);
+    transform: scale(1.05);
+    box-shadow: 0 0 12px rgba(64, 138, 251, 0.5);
+}
+
+.connect-button:active {
+    transform: scale(0.98);
+}
