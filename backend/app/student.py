@@ -7,6 +7,7 @@ client = MongoClient(uri)
 db = client["CLASSLYLINKED"]
 students = db["STUDENTS"]
 courses = db["COURSES"]
+requests = db["MATE_REQUESTS"]
 
 class Student: 
     # constructor for Student class. Takes in first name, last name, username, and password
@@ -33,7 +34,8 @@ class Student:
                 "isAdmin": isAdmin,
                 "courses": [],
                 "interests": [],
-                "classMates": []
+                "classMates": [],
+                "mateRequests": []
             })
     
     # get methods
