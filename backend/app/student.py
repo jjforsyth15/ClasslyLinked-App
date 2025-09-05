@@ -33,7 +33,7 @@ class Student:
                 "isAdmin": isAdmin,
                 "courses": [],
                 "interests": [],
-                "mates": []
+                "classMates": []
             })
     
     # get methods

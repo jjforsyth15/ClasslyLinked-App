@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "./Home.scss";
+import "./Home.css";
 import axios from "axios";
 import "./Profile.css";
 import "./AddClass.css";
@@ -100,10 +100,6 @@ function Home() {
     getCourses();
   }, [username]);
   
-//   Runs rain background effect
-  useEffect(() => {
-    rainBackground();
-  }, []);
 
 // Displays user matches
   useEffect(() => {
@@ -165,21 +161,10 @@ const handleStudentCourseSearch = async (e) => {
     }
 };
 
-// Rain background
-const rainBackground = () => {
-    const rain = document.querySelector(".rain");
-    for (let i = 0; i < 500; i++) {
-        const drop = document.createElement("div");
-        drop.className = "drop";
-        rain.appendChild(drop);
-    }
-}
-
 
     // Webpage to return
     return (
         <div className="entire-page">
-        <div className="rain"></div>
         {/* menu */}
         <div className="menu-hover-wrapper">
             <div className="hover-zone"></div>
