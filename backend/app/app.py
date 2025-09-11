@@ -5,6 +5,7 @@ from student import Student
 from admin import Admin
 from course import Course
 from MatchEngine import getMatches
+from mateRequest import mateRequest
 import bcrypt 
 
 app = Flask(__name__)
@@ -14,6 +15,7 @@ client = MongoClient("mongodb+srv://jjforsyth15:ClasslyLinked2025@classlylinked.
 db = client["CLASSLYLINKED"]
 students = db["STUDENTS"]
 courses = db["COURSES"]
+mateRequests = db["MATE_REQUESTS"]
 
 # Route function for signing up
 @app.route("/signup", methods=["POST"])
@@ -315,7 +317,96 @@ def get_user_matches():
 
     return jsonify(results), 200
     
+# classMate request app routes
+def verify_users(self, sender, receiver):
+    if not sender:
+        return jsonify({"message": "Sender userName is required"}), 400
+    elif not receiver:
+        return jsonify({"message": "Receiver userName is required"}), 400
+
+    if not students.find_one({"userName": sender}):
+        return jsonify({"message": "Sender userName not found"}), 404
+    elif not students.find_one({"userName": receiver}):
+        return jsonify({"message": "Receiver userName not found"}), 404
     
+    return True
+
+
+@app.route("/send_mate_request", methods=["POST"])
+def send_mate_request():
+    data = request.json
+    sender = data.get("sender")
+    receiver = data.get("receiver")
+
+    if verify_users(sender, receiver) is not True:
+        return jsonify({"message": "sender and receiver userNames culd not be verified"}), 400
+    
+    mate = mateRequest(sender, receiver)
+
+    return jsonify({"message": "classMate request sent successfully"}), 200
+
+
+@app.route("/accept_mate_request", methods=["POST"])
+def accept_mate_request():
+    data = request.json
+    sender = data.get("sender")
+    receiver = data.get("receiver")
+
+    if verify_users(sender, receiver) is not True:
+        return jsonify({"message": "sender and receiver userNames culd not be verified"}), 400
+    
+    mate = mateRequest.load_request(sender, receiver)
+    if mate is None:
+        return jsonify({"message": "Could not find classMate request"}), 404
+    mate = mate.accept_request(sender, receiver)
+
+    if mate is not True:
+        return jsonify({"message": "Could not accept classMate request"}), 401
+    
+    return jsonify({"message": "classMate request accepted successfully"}), 200
+
+@app.route("/decline_mate_request", methods=["POST"])
+def decline_mate_request():
+    data = request.json
+    sender = data.get("sender")
+    receiver = data.get("receiver")
+
+    if verify_users(sender, receiver) is not True:
+        return jsonify({"message": "Could not verify usernames"}), 400
+    
+    mate = mateRequest.load_request(sender, receiver)
+    if mate is None:
+        return jsonify({"message": "Could not find classMate request"}), 404
+    
+    mate = mate.decline_request(sender, receiver)
+
+    if mate is not True:
+        return jsonify({"message": "Could not decline classMate request"}), 401
+    
+    return jsonify({"message": "classMate request declined successfully"}), 200
+
+@app.route("/cancel_mate_request", methods=["POST"])
+def cancel_mate_request():
+    data = request.json
+    sender = data.get("sender")
+    receiver = data.get("receiver")
+
+    if verify_users(sender, receiver) is not True:
+        return jsonify({"message": "Could not verify usernames"}), 400
+    
+    mate = mateRequest.load_request(sender, receiver)
+    if mate is None:
+        return jsonify({"message": "Could not find classMate request"}), 404
+    
+    mate = mate.cancel_request(sender, receiver)
+
+    if mate is not True:
+        return jsonify({"message": "Could not cancel classMate request"}), 401
+    
+    return jsonify({"message": "classMate request canceled successfully"}), 200
+    
+
+
 
 if __name__ == "__main__":
     app.run(debug=True)

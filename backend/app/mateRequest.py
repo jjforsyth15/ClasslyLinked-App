@@ -214,5 +214,3 @@ class mateRequest():
 
         return request
     
-
-    # Need to test new request, accept, cancel, decline
