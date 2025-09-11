@@ -318,17 +318,23 @@ def get_user_matches():
     return jsonify(results), 200
     
 # classMate request app routes
-def verify_users(self, sender, receiver):
+def verify_users(sender: str, receiver: str):
     if not sender:
-        return jsonify({"message": "Sender userName is required"}), 400
+        return False
+        # return jsonify({"message": "Sender userName is required"}), 400
     elif not receiver:
-        return jsonify({"message": "Receiver userName is required"}), 400
+        return False
+        # return jsonify({"message": "Receiver userName is required"}), 400
+    elif sender == receiver:
+        return False
 
     if not students.find_one({"userName": sender}):
-        return jsonify({"message": "Sender userName not found"}), 404
+        return False
+        # return jsonify({"message": "Sender userName not found"}), 404
     elif not students.find_one({"userName": receiver}):
-        return jsonify({"message": "Receiver userName not found"}), 404
-    
+        return False
+        # return jsonify({"message": "Receiver userName not found"}), 404
+
     return True
 
 
@@ -339,9 +345,19 @@ def send_mate_request():
     receiver = data.get("receiver")
 
     if verify_users(sender, receiver) is not True:
-        return jsonify({"message": "sender and receiver userNames culd not be verified"}), 400
+        return jsonify({"message": "sender and receiver userNames could not be verified"}), 400
     
+    mate = mateRequest.load_request(sender, receiver, "pending")
+    if mate is not None:
+        return jsonify({"message": "Pending classMate request already exists"}), 401
+
     mate = mateRequest(sender, receiver)
+    exists = students.find_one({
+            "userName": sender,
+            "classMates": receiver
+        })
+    if exists:
+        return jsonify({"message": "Users are already classMates"}), 401
 
     return jsonify({"message": "classMate request sent successfully"}), 200
 
@@ -353,7 +369,7 @@ def accept_mate_request():
     receiver = data.get("receiver")
 
     if verify_users(sender, receiver) is not True:
-        return jsonify({"message": "sender and receiver userNames culd not be verified"}), 400
+        return jsonify({"message": "sender and receiver userNames could not be verified"}), 400
     
     mate = mateRequest.load_request(sender, receiver)
     if mate is None:

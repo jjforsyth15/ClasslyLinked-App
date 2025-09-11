@@ -15,10 +15,18 @@ class mateRequest():
         self.receiver = receiver
         self.status = status
 
+        exists = students.find_one({
+            "userName": sender,
+            "classMates": receiver
+        })
+
         if not students.find_one({"userName": sender}):
             print("__init__: Could not find userName of sender")
         elif not students.find_one({"userName": receiver}):
             print("__init__: Could not find userName of receiver")
+        
+        elif exists:
+            print("__init__: Users are already classMates")
 
         else: 
             request = requests.find_one({"sender": sender, "receiver": receiver, "status": status})
@@ -199,8 +207,8 @@ class mateRequest():
 
     # static method to allow a request to be loaded from the MATE_REQUESTS database collection without creating new student
     @classmethod
-    def load_request(cls, sender, receiver):
-        request_doc = requests.find_one({"sender": sender, "receiver": receiver})
+    def load_request(cls, sender, receiver, status = "pending"):
+        request_doc = requests.find_one({"sender": sender, "receiver": receiver, "status": status})
 
         if not request_doc:
             print("Request does not exist")
