@@ -15,33 +15,44 @@ class mateRequest():
         self.receiver = receiver
         self.status = status
 
-        request = requests.find_one({"sender": sender, "receiver": receiver, "status": status})
-        viceVersa = requests.find_one({"sender": receiver, "receiver": sender, "status": status})
+        if not students.find_one({"userName": sender}):
+            print("__init__: Could not find userName of sender")
+        elif not students.find_one({"userName": receiver}):
+            print("__init__: Could not find userName of receiver")
 
-        if(request):
-            requestStatus = request["status"]
-            print("Request already exists. Status of request: ", requestStatus)
+        else: 
+            request = requests.find_one({"sender": sender, "receiver": receiver, "status": status})
+            viceVersa = requests.find_one({"sender": receiver, "receiver": sender, "status": status})
 
-        elif(viceVersa):
-            self.accept_request(receiver, sender)
-            # requests.update_one(
-            #     {"sender": receiver, "receiver": sender},
-            #     {"$set": {"status": "accepted"}}
-            # )
-            print("Mutually requested. Auto accepted ClassMates successfully")  
+            if(request):
+                requestStatus = request["status"]
+                print("Request already exists. Status of request: ", requestStatus)
 
-        else:
-            requests.insert_one({
-                "sender": sender,
-                "receiver": receiver,
-                "status": status
-            })
-            students.update_one(
-                {"userName": receiver},
-                {"$addToSet": {"mateRequests": sender}}
-            )
+            elif(viceVersa):
+                self.accept_request(receiver, sender)
+                # requests.update_one(
+                #     {"sender": receiver, "receiver": sender},
+                #     {"$set": {"status": "accepted"}}
+                # )
+                print("Mutually requested. Auto accepted ClassMates successfully")  
+
+            else:
+                requests.insert_one({
+                    "sender": sender,
+                    "receiver": receiver,
+                    "status": status
+                })
+                students.update_one(
+                    {"userName": receiver},
+                    {"$addToSet": {"mateRequests": sender}}
+                )
 
     def accept_request(self, sender, receiver):
+        if self.check_user(sender) is False:
+            return False
+        if self.check_user(receiver) is False:
+            return False
+        
         request_status = self.check_status(sender, receiver)
 
         if request_status is False:
@@ -49,12 +60,20 @@ class mateRequest():
             return False
         elif request_status == "pending":
             requests.update_one(
-                {"sender": sender, "receiver": receiver},
+                {"sender": sender, "receiver": receiver, "status": "pending"},
                 {"$set": {"status": "accepted"}}
             )
             students.update_one(
                 {"userName": receiver},
                 {"$pull": {"mateRequests": sender}}
+            )
+            students.update_one(
+                {"userName": sender},
+                {"$addToSet": {"classMates": receiver}}
+            )
+            students.update_one(
+                {"userName": receiver},
+                {"$addToSet": {"classMates": sender}}
             )
             print("Added ClassMates Successfully")
             return True
@@ -99,6 +118,11 @@ class mateRequest():
     #         return False
 
     def decline_request(self, sender, receiver):
+        if self.check_user(sender) is False:
+            return False
+        if self.check_user(receiver) is False:
+            return False
+
         request_status = self.check_status(sender, receiver)
         if request_status is False:
             print("decline_request: Pending request does not exist")
@@ -106,7 +130,7 @@ class mateRequest():
 
         elif request_status == "pending":
             requests.update_one(
-                {"sender": sender, "receiver": receiver},
+                {"sender": sender, "receiver": receiver, "status": "pending"},
                 {"$set": {"status": "declined"}}
             )
             students.update_one(
@@ -129,6 +153,11 @@ class mateRequest():
             return request_doc["status"]
 
     def cancel_request(self, sender, receiver):
+        if self.check_user(sender) is False:
+            return False
+        if self.check_user(receiver) is False:
+            return False
+        
         request_status = self.check_status(sender, receiver)
 
         if request_status is False:
@@ -136,7 +165,7 @@ class mateRequest():
             return False
         elif request_status == "pending":
             requests.update_one(
-                {"sender": sender, "receiver": receiver},
+                {"sender": sender, "receiver": receiver, "status": "pending"},
                 {"$set": {"status": "canceled"}}
             )
             students.update_one(
@@ -156,6 +185,15 @@ class mateRequest():
             return None
         
         return request_doc     
+    
+    def check_user(self, userToCheck):
+        user = students.find_one({"userName": userToCheck})
+
+        if user :
+            return True
+        else:
+            print("check_user: Could not find userToCheck")
+            return False
 
 
 
@@ -165,8 +203,9 @@ class mateRequest():
         request_doc = requests.find_one({"sender": sender, "receiver": receiver})
 
         if not request_doc:
+            print("Request does not exist")
             return None
-        
+            
         request = cls.__new__(cls)
         
         request.sender = request_doc["sender"]
