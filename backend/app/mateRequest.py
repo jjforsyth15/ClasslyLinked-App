@@ -149,6 +149,15 @@ class mateRequest():
             print("cancel_request: Unknown request status: ", request_status)
             return False
         
+    def print_request(self, sender, receiver):
+        request_doc = self.check_status(sender, receiver)
+
+        if not request_doc:
+            return None
+        
+        return request_doc     
+
+
 
     # static method to allow a request to be loaded from the MATE_REQUESTS database collection without creating new student
     @classmethod
@@ -165,3 +174,6 @@ class mateRequest():
         request.status = request_doc["status"]
 
         return request
+    
+
+    # Need to test new request, accept, cancel, decline
